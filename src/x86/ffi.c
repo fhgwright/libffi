@@ -118,6 +118,16 @@ ffi_prep_cif_machdep(ffi_cif *cif)
       break;
     case FFI_TYPE_STRUCT:
       {
+        /* Handle single-float and single-double structs specially */
+        if (!cif->rtype->elements[1]) {
+          if (cif->rtype->elements[0]->type == FFI_TYPE_FLOAT) {
+            flags = X86_RET_FLOAT;
+            break;
+          } else if (cif->rtype->elements[0]->type == FFI_TYPE_DOUBLE) {
+            flags = X86_RET_DOUBLE;
+            break;
+          }
+        }
 #if defined(X86_WIN32) || defined(X86_DARWIN)
         size_t size = cif->rtype->size;
         if (size == 1)
