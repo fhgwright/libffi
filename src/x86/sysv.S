@@ -127,8 +127,8 @@ L(UW2):
 
 	andl	$X86_RET_TYPE_MASK, %ecx
 #ifdef __PIC__
-	call	C(__x86.get_pc_thunk.bx)
-L(pc1):
+	call	L(pc1)
+L(pc1):	popl	%ebx
 	leal	L(store_table)-L(pc1)(%ebx, %ecx, 8), %ebx
 #else
 	leal	L(store_table)(,%ecx, 8), %ebx
@@ -264,8 +264,9 @@ ENDF(ffi_call_i386)
 #  undef FFI_CLOSURE_MASK_AND_JUMP
 #  define FFI_CLOSURE_MASK_AND_JUMP(N, UW)				\
 	andl	$X86_RET_TYPE_MASK, %eax;				\
-	call	C(__x86.get_pc_thunk.dx);				\
+	call	L(C1(pc,N));						\
 L(C1(pc,N)):								\
+	popl	%edx;							\
 	leal	L(C1(load_table,N))-L(C1(pc,N))(%edx, %eax, 8), %edx;	\
 	movl	closure_CF(%esp), %eax;		/* optimiztic load */	\
 	_CET_NOTRACK jmp *%edx
@@ -692,8 +693,8 @@ L(UW34):
 	movl	20(%ebx), %eax				/* load cif->flags */
 	andl	$X86_RET_TYPE_MASK, %eax
 #ifdef __PIC__
-	call	C(__x86.get_pc_thunk.bx)
-L(pc4):
+	call	L(pc4)
+L(pc4):	popl	%ebx
 	leal	L(load_table4)-L(pc4)(%ebx, %eax, 8), %ecx
 #else
 	leal	L(load_table4)(,%eax, 8), %ecx
@@ -809,8 +810,8 @@ L(UW46):
 	movl	20(%ebx), %eax				/* load cif->flags */
 	andl	$X86_RET_TYPE_MASK, %eax
 #ifdef __PIC__
-	call	C(__x86.get_pc_thunk.bx)
-L(pc5):
+	call	L(pc5)
+L(pc5):	popl	%ebx
 	leal	L(load_table5)-L(pc5)(%ebx, %eax, 8), %ecx
 #else
 	leal	L(load_table5)(,%eax, 8), %ecx
@@ -919,17 +920,12 @@ ENDF(C(ffi_closure_raw_THISCALL))
 #endif
 
 #if defined(__PIC__)
+# if !defined X86_DARWIN && !defined HAVE_HIDDEN_VISIBILITY_ATTRIBUTE
 	COMDAT(C(__x86.get_pc_thunk.bx))
 C(__x86.get_pc_thunk.bx):
 	movl	(%esp), %ebx
 	ret
 ENDF(C(__x86.get_pc_thunk.bx))
-# if defined X86_DARWIN || defined HAVE_HIDDEN_VISIBILITY_ATTRIBUTE
-	COMDAT(C(__x86.get_pc_thunk.dx))
-C(__x86.get_pc_thunk.dx):
-	movl	(%esp), %edx
-	ret
-ENDF(C(__x86.get_pc_thunk.dx))
 #endif /* DARWIN || HIDDEN */
 #endif /* __PIC__ */
 
