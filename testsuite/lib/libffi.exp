@@ -280,6 +280,10 @@ proc libffi-dg-prune { target_triplet text } {
     regsub -all "(^|\n)\[^\n\]*warning: .* has a LOAD segment with RWX permissions" $text "" text
     # Ignore Emscripten INFO messages
     regsub -all "(^|\n)(cache|shared):INFO:\[^\n\]*" $text "" text
+    # We get this when building for i386 on macOS 10.13+
+    regsub -all -line "^ld: warning: The i386 architecture is deprecated for macOS.*$" $text "" text
+    # We get this when building for powerpc on macOS 10.4
+    regsub -all -line "^ld: warning: object file compiled with -mlong-branch which is no longer needed.*$" $text "" text
     return $text
 }
 
@@ -469,6 +473,10 @@ proc libffi_feature_test { test } {
     set lines [libffi_target_compile $src $src.i preprocess ""]
     file delete $src
     file delete $src.i
+
+    # We get this when building for i386 on macOS 10.13+, and this output
+    # isn't filtered through libffi-dg-prune.
+    regsub "^ld: warning: The i386 architecture is deprecated for macOS.*\\n" $lines "" lines
 
     return [string match "" $lines]
 }
