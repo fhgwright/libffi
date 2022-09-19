@@ -8,7 +8,6 @@ Makefile
 !testsuite/libffi.bhaible/Makefile
 Makefile.in
 aclocal.m4
-compile
 !.ci/compile
 configure
 depcomp
