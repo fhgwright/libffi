@@ -1,3 +1,27 @@
+commit 3d0ce1e6fcf19f853894862abcbac0ae78a7be60
+Author: Anthony Green <green@moxielogic.org>
+Date:   Sun Feb 18 09:22:51 2024 -0500
+
+    chore: update version to 3.4.6 and fix long double regression on mips64 and alpha
+
+commit 94eaedb40e67e26d2fa35d1c22d8818f4d9f4c2d
+Author: Anthony Green <green@moxielogic.org>
+Date:   Sun Feb 18 08:41:04 2024 -0500
+
+    Update sparc64 host
+
+commit e1dcf03b4642e75a1058799a3023e0ebd0024258
+Author: Anthony Green <green@moxielogic.org>
+Date:   Sun Feb 18 08:02:45 2024 -0500
+
+    Update cfarm hostnames
+
+commit cd78b539125ae615d76df5a57039fe70ebd56c27
+Author: Anthony Green <green@moxielogic.org>
+Date:   Sun Feb 18 07:48:51 2024 -0500
+
+    Always define long double types.
+
 commit 012fcaf96c87ab617ba34babce9b6b259188fcf0
 Author: Anthony Green <green@moxielogic.org>
 Date:   Thu Feb 15 08:35:02 2024 -0500
