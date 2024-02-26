@@ -889,7 +889,7 @@ ENDF(C(ffi_closure_raw_THISCALL))
 
 #ifdef X86_DARWIN
 # define COMDAT(X)							\
-        .section __TEXT,__textcoal_nt,coalesced,pure_instructions;		\
+        .section __TEXT,__text,coalesced,pure_instructions;		\
         .weak_definition X;						\
         FFI_HIDDEN(X)
 #elif defined __ELF__ && !(defined(__sun__) && defined(__svr4__))
@@ -917,7 +917,7 @@ ENDF(C(__x86.get_pc_thunk.dx))
 #endif /* __PIC__ */
 
 /* Sadly, OSX cctools-as doesn't understand .cfi directives at all.  */
-#if 0
+
 #ifdef __APPLE__
 .section __TEXT,__eh_frame,coalesced,no_toc+strip_static_syms+live_support
 EHFrame0:
@@ -1217,7 +1217,7 @@ L(EFDE9):
     .long    0
     .long    0
 #endif /* __APPLE__ */
-#endif /* if 0 */
+
 #endif /* ifndef _MSC_VER */
 
 #endif /* ifdef __i386__ */
