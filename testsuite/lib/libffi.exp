@@ -367,6 +367,7 @@ proc libffi_target_compile { source dest type options } {
     global libffi_include
     global target_triplet
     global compiler_vendor
+    global env
 
     if { [target_info needs_status_wrapper]!="" && [info exists gluefile] } {
         lappend options "libs=${gluefile}"
@@ -389,7 +390,9 @@ proc libffi_target_compile { source dest type options } {
         if { [istarget "*-*-darwin9*"] || [istarget "*-*-darwin1*"]
              || [istarget "*-*-darwin2*"] } {
             # lappend options "additional_flags=-Wl,-allow_stack_execute"
-            lappend options "additional_flags=-Wno-unused-command-line-argument"
+            if ![info exists env(LIBFFI_TEST_OLDGCC)] {
+                lappend options "additional_flags=-Wno-unused-command-line-argument"
+            }
             lappend options "additional_flags=-Wl,-search_paths_first"
         }
 
@@ -523,7 +526,10 @@ proc run-many-tests { testcases extra_flags } {
             }
         }
         "gnu" {
-            set common "-W -Wall -Wno-psabi -fno-diagnostics-color"
+            set common "-W -Wall"
+            if ![info exists env(LIBFFI_TEST_OLDGCC)] {
+                set common "$common -Wno-psabi -fno-diagnostics-color"
+            }
             if [info exists env(LIBFFI_TEST_OPTIMIZATION)] {
                 set optimizations [ list $env(LIBFFI_TEST_OPTIMIZATION) ]
             } else {
@@ -553,6 +559,7 @@ proc run-many-tests { testcases extra_flags } {
                 "-DABI_NUM=FFI_FASTCALL -DABI_ATTR=__FASTCALL__"
             }
         } elseif { [istarget "x86_64-*-*"] \
+                       && ![info exists env(LIBFFI_TEST_OLDGCC)] \
                        && [libffi_feature_test "#if !defined __ILP32__  \
 						&& !defined __i386__"] } {
             set targetabis {
