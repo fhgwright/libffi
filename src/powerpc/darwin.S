@@ -31,8 +31,6 @@
 #define MODE_CHOICE(x, y) x
 #endif
 
-#define machine_choice	MODE_CHOICE(ppc,ppc64)
-
 ; Define some pseudo-opcodes for size-independent load & store of GPRs ...
 #define lgu		MODE_CHOICE(lwzu, ldu)
 #define lg		MODE_CHOICE(lwz,ld)
