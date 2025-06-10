@@ -1,3 +1,139 @@
+commit e28a0d5b0708ade04979e2a1d5c2a2d3acc749ec
+Author: Anthony Green <green@moxielogic.com>
+Date:   Tue Jun 10 16:17:58 2025 -0400
+
+    ci: add fail-if-no-assets option in tarball workflow
+
+commit 90220e51bcb2040d24b1f06581f0805a3091acda
+Author: Anthony Green <green@moxielogic.com>
+Date:   Tue Jun 10 16:03:47 2025 -0400
+
+    Update version.
+
+commit 330467d55c5f983d16cb2b03703a149db21d07ce
+Author: Anthony Green <green@moxielogic.com>
+Date:   Tue Jun 10 16:01:56 2025 -0400
+
+    Move new symbols to new symbol versioning.
+
+commit 517310ddbf7046a743af035ce61f2b304802bd00
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 19:03:49 2025 -0400
+
+    ci: update compiler versions in github workflow
+
+commit d994395ce74026f67b50957e6ce899e8ddbe5028
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 18:43:40 2025 -0400
+
+    ci: update gcc version to 15 in build process
+
+commit 26d7be77cc151acb458ef84f66859ef5300ce432
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 18:23:15 2025 -0400
+
+    ci: update build.sh for Linux build process
+
+commit a18d4e95d39d4b2b155abdea4ff1ac0006c12a6f
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 13:35:29 2025 -0400
+
+    feat(.github/workflows): add step to wipe old snapshot assets in tarball.yml
+
+commit b9b837855666636645bd3e00ce60d082ad8cc713
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 13:29:03 2025 -0400
+
+    fix(github-actions): correct regex in version extraction
+
+commit 7ac6f14591d174a314bf45a8b02d136525cd86f9
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 13:08:02 2025 -0400
+
+    ci: change packages installed during workflow
+
+commit ceab352dfa55745ab058a289e59faee925508d10
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 13:01:50 2025 -0400
+
+    ci: add installation of necessary tools to tarball workflow
+
+commit 1f73aa507ed8e8bc49864c99ff21d82dd454cb55
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 12:56:19 2025 -0400
+
+    refactor(.github/workflows/tarball): remove repeated job blocks
+
+commit 7f5375d7c75805d02f95516875107e9eb345ae8c
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 12:55:09 2025 -0400
+
+    chore(workflows): update snapshot release description in tarball.yml
+
+commit 2a5195bb2a633f7c9cc3b787d16ddb940c2a719d
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 12:54:55 2025 -0400
+
+    chore(.github/workflows): update tarball.yml indentation
+
+commit 2f535b8f747eea5c3336ecf20a3ecc9c0d523f62
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 12:52:43 2025 -0400
+
+    chore(ci): update tarball workflow in GitHub Actions
+
+commit 172bfb41f4f27cac939537e907106ef37abae701
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 12:22:35 2025 -0400
+
+    chore(.github/workflows): update tarball workflow to use softprops/action-gh-release
+
+commit 0947743f691bbd9d034a8ebe178ca8cb81e7fcd7
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 11:53:15 2025 -0400
+
+    Make tarballs (#924)
+    
+    * Create tarballs in CI
+
+commit a46977da5056cc7f23eee6db544d88cd5a88b9f4
+Author: Kleis Auke Wolthuizen <github@kleisauke.nl>
+Date:   Mon Jun 9 15:55:02 2025 +0200
+
+    Downgrade Autoconf requirement to version 2.68 (#922)
+    
+    * Downgrade Autoconf requirement to version 2.68
+    
+    * CI: remove redundant Autoconf install scripts
+
+commit 40a76827051bde95e20cc4edeba31a353c074321
+Author: Anthony Green <green@moxielogic.com>
+Date:   Mon Jun 9 09:49:00 2025 -0400
+
+    Improve CI test coverage (#923)
+    
+    Add CI testing on Windows with both gcc and clang.
+
+commit 64a42f618dcd555920756e84b0c8bfcec358c32e
+Author: Anthony Green <green@moxielogic.com>
+Date:   Sun Jun 8 16:59:58 2025 -0400
+
+    More CI testing (#921)
+    
+    * ci: add new build configuration in GitHub Actions
+    
+    * ci: add Windows clang build workflow
+    
+    * ci: add additional packages to GitHub workflows build
+    
+    * ci: optimize build workflow and improve commenting
+    
+    * ci: remove unused MSVC dev command from build workflow
+    
+    * ci: modify build workflow to support multiple compilers
+    
+    * build(github-actions): use matrix.compiler for CC and CXX variables
+
 commit d2c78d2ebbd9e65401095c6a2f281fe5132f028b
 Author: Anthony Green <green@moxielogic.com>
 Date:   Sun Jun 8 08:16:42 2025 -0400
