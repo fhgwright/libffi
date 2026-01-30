@@ -34,7 +34,14 @@
 #define MODE_CHOICE(x, y) x
 #endif
 
+/* OSX 10.5+ uses 'ppc7400' as the ppc ID, but earlier versions use 'ppc'. */
+/* Using 'ppc7400' excludes the G3, which is supported in <10.5. */
+#if defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) \
+    && __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ >= 1050
 #define machine_choice	MODE_CHOICE(ppc7400,ppc64)
+#else
+#define machine_choice	MODE_CHOICE(ppc,ppc64)
+#endif
 
 ; Define some pseudo-opcodes for size-independent load & store of GPRs ...
 #define lgu		MODE_CHOICE(lwzu, ldu)
