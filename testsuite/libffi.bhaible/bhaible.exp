@@ -23,11 +23,9 @@ global compiler_vendor
 # The conversion of this testsuite into a dejagnu compatible testsuite
 # was done in a pretty lazy fashion, and requires the use of compiler
 # flags to disable warnings for now.
+# The -Wno-unused-but-set-variable option is now handled by lib/libffi.exp
 if { [string match $compiler_vendor "gnu"] } {
     set warning_options "-Wno-unused-variable -Wno-unused-parameter -Wno-uninitialized";
-    if ![info exists env(LIBFFI_TEST_OLDGCC)] {
-        set common "$warning_options -Wno-unused-but-set-variable"
-    }
 }
 if { [string match $compiler_vendor "microsoft"] } {
     # -wd4996  suggest use of vsprintf_s instead of vsprintf

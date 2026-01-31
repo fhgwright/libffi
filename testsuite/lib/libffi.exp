@@ -371,6 +371,7 @@ proc libffi_target_compile { source dest type options } {
     global libffi_include
     global target_triplet
     global compiler_vendor
+    global env
 
     if { [target_info needs_status_wrapper]!="" && [info exists gluefile] } {
 	lappend options "libs=${gluefile}"
@@ -392,7 +393,12 @@ proc libffi_target_compile { source dest type options } {
     if { [istarget "*-*-darwin9*"] || [istarget "*-*-darwin1*"]
 	 || [istarget "*-*-darwin2*"] } {
 	# lappend options "additional_flags=-Wl,-allow_stack_execute"
-        lappend options "additional_flags=-Wno-unused-command-line-argument"
+	if ![info exists env(LIBFFI_TEST_GCC_NO_NO_UNUSED_OPT)] {
+            lappend options "additional_flags=-Wno-unused-command-line-argument"
+        }
+	if ![info exists env(LIBFFI_TEST_NO_NO_UNUSED_BUT_SET)] {
+            lappend options "additional_flags=-Wno-unused-but-set-variable"
+        }
         # Some GCCs throw a warning if '-Wl' options are used in
         # non-link operations.
         # The 'assembly' case occurs in 'libffi_feature_test'.
@@ -439,6 +445,11 @@ proc libffi_target_compile { source dest type options } {
     # which causes it to be seen as unsupported.
     if { [string match "wasm32-*" $target_triplet] } {
         lappend options "additional_flags=-Wno-unused-command-line-argument"
+    }
+
+    # Allow deobfuscating compiler messages in logfiles
+    if { [info exists env(LIBFFI_TEST_NO_COLOR_DIAGS)] } {
+        lappend options "additional_flags=-fdiagnostics-color=never"
     }
 
     verbose "options: $options"
@@ -526,7 +537,7 @@ proc run-many-tests { testcases extra_flags } {
       }
       "gnu" {
         set common "-W -Wall"
-        if ![info exists env(LIBFFI_TEST_OLDGCC)] {
+        if ![info exists env(LIBFFI_TEST_NO_NO_PSABI)] {
             set common "$common -Wno-psabi"
         }
         if [info exists env(LIBFFI_TEST_OPTIMIZATION)] {
@@ -549,21 +560,21 @@ proc run-many-tests { testcases extra_flags } {
     info exists env(LD_LIBRARY_PATH)
 
     set targetabis { "" }
+    # GCC's i386 'thiscall' is known absent in 4.4, present in 4.7
+    # GCC's x86_64 'ms_abi' is known absent in 4.3, present in 4.4
     if [string match $compiler_vendor "gnu"] {
         if [libffi_feature_test "#ifdef __i386__"] {
-            set targetabis {
-                ""
-                "-DABI_NUM=FFI_STDCALL -DABI_ATTR=__STDCALL__"
-                "-DABI_NUM=FFI_THISCALL -DABI_ATTR=__THISCALL__"
-                "-DABI_NUM=FFI_FASTCALL -DABI_ATTR=__FASTCALL__"
+            lappend targetabis "-DABI_NUM=FFI_STDCALL -DABI_ATTR=__STDCALL__"
+            if ![info exists env(LIBFFI_TEST_NO_THISCALL)] {
+                lappend targetabis \
+                        "-DABI_NUM=FFI_THISCALL -DABI_ATTR=__THISCALL__"
             }
+            lappend targetabis"-DABI_NUM=FFI_FASTCALL -DABI_ATTR=__FASTCALL__"
         } elseif { [istarget "x86_64-*-*"] \
-		   && [libffi_feature_test "#if !defined __ILP32__  \
-						&& !defined __i386__"] } {
-            set targetabis {
-                ""
-                "-DABI_NUM=FFI_GNUW64 -DABI_ATTR=__MSABI__"
-            }
+                   && [libffi_feature_test "#if !defined __ILP32__  \
+                                                && !defined __i386__"]
+                   && ![info exists env(LIBFFI_TEST_NO_MSABI)] } {
+            lappend targetabis "-DABI_NUM=FFI_GNUW64 -DABI_ATTR=__MSABI__"
         }
     }
 
