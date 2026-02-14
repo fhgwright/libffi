@@ -1,1 +1,7 @@
 load_lib "standard.exp"
+
+# Avoid multitop on Darwin, where it's at best useless, and attempts to
+# determine it may cause failures with the use of the -dumpspecs option.
+if { [istarget "*-*-darwin*"] } {
+    set_board_info multitop ""
+}
