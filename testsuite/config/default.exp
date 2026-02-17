@@ -5,3 +5,11 @@ load_lib "standard.exp"
 if { [istarget "*-*-darwin*"] } {
     set_board_info multitop ""
 }
+
+# Provide a way to pass the host architecture to the compiler, which
+# doesn't happen automatically.
+#
+if [info exists env(HOSTARCH)] {
+  set_board_info cflags "-arch ${env(HOSTARCH)}"
+  set_board_info cxxflags "-arch ${env(HOSTARCH)}"
+}
