@@ -389,7 +389,12 @@ proc libffi_target_compile { source dest type options } {
 	 || [istarget "*-*-darwin2*"] } {
 	# lappend options "additional_flags=-Wl,-allow_stack_execute"
         lappend options "additional_flags=-Wno-unused-command-line-argument"
-        lappend options "additional_flags=-Wl,-search_paths_first"
+        # Some GCCs throw a warning if '-Wl' options are used in
+        # non-link operations.
+        # The 'assembly' case occurs in 'libffi_feature_test'.
+        if ![string match $type assembly] {
+            lappend options "additional_flags=-Wl,-search_paths_first"
+        }
     }
 
     # If you're building the compiler with --prefix set to a place
