@@ -431,9 +431,8 @@ proc libffi_target_compile { source dest type options } {
         # this may be required for g++, but just confused clang.
         if { [string match "*.cc" $source] } {
             lappend options "c++"
-            if { [string match "*-*-darwin*" $target_triplet] } {
-                lappend options "libs= -lc++"
-            }
+            # Don't add -lc++ for Darwin - it may be the wrong library
+            # and the correct one is added automatically.
         }
 
         if { [string match "arc*-*-linux*" $target_triplet] } {
