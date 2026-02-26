@@ -562,7 +562,9 @@ proc run-many-tests { testcases extra_flags } {
     set targetabis { "" }
     # GCC's i386 'thiscall' is known absent in 4.4, present in 4.7
     # GCC's x86_64 'ms_abi' is known absent in 4.3, present in 4.4
-    if [string match $compiler_vendor "gnu"] {
+    # clang's x86_64 'ms_abi' is known absent in 3.3, present in 3.4
+    if { [string match $compiler_vendor "gnu"]
+         || [string match $compiler_vendor "clang"] } {
         if [libffi_feature_test "#ifdef __i386__"] {
             lappend targetabis "-DABI_NUM=FFI_STDCALL -DABI_ATTR=__STDCALL__"
             if ![info exists env(LIBFFI_TEST_NO_THISCALL)] {
