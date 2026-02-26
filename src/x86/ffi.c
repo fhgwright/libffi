@@ -396,8 +396,16 @@ ffi_call_int (ffi_cif *cif, void (*fn)(void), void *rvalue,
 	     inside, however, would get 16 byte alignment.  Since libffi does
 	     not support vectors, we need non concern ourselves with other
 	     cases.  */
+	  /*****
+	     Actually, the above is incorrect.  Argument alignment is never
+	     stricter than four bytes, regardless of type (though the entire
+	     stack frame is 16-byte aligned).
+
+	     Hence, we disable the following statement:
+
 	  if (t == FFI_TYPE_STRUCT && ty->alignment >= 16)
 	    align = 16;
+	   *****/
 
 	  if (dir < 0)
 	    {
@@ -456,6 +464,13 @@ struct closure_frame
   void (*fun)(ffi_cif*,void*,void**,void*);	/* 32 */
   void *user_data;				/* 36 */
 };
+
+/* Alignment is more complicated in the closure case, since the arguments
+   are received on the stack as usual, but provided to the callee via
+   pointers in the args[] array.  The received arguments never get stricter
+   than four-byte alignment, but the outgoing args need to be fully
+   aligned according to their type.  In some cases, this requires making
+   more strictly aligned copies. */
 
 int FFI_HIDDEN FFI_DECLARE_FASTCALL
 ffi_closure_inner (struct closure_frame *frame, char *stack)
@@ -525,7 +540,7 @@ ffi_closure_inner (struct closure_frame *frame, char *stack)
 	  size_t za = FFI_ALIGN (z, FFI_SIZEOF_ARG);
 	  size_t align = FFI_SIZEOF_ARG;
 
-	  /* See the comment in ffi_call_int.  */
+	  /* Note that this alignment only applies to the outgoing args */
 	  if (t == FFI_TYPE_STRUCT && ty->alignment >= 16)
 	    align = 16;
 
@@ -547,8 +562,16 @@ ffi_closure_inner (struct closure_frame *frame, char *stack)
 	    }
 	  else
 	    {
-	      argp = (char *)FFI_ALIGN (argp, align);
+	      /* Input args always have four-byte alignment. */
+	      argp = (char *)FFI_ALIGN (argp, 4);
 	      valp = argp;
+	      /* If the input arg isn't sufficiently aligned,
+	         make an aligned copy */
+	      if ((size_t) valp & (align -1))
+	        {
+	          valp = alloca(za);
+	          memcpy(valp, argp, za);
+	        }
 	      argp += za;
 	    }
 	}
