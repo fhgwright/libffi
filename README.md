@@ -1,5 +1,3 @@
-Status
-======
 
 libffi-3.6.0 was released on June 20, 2026.
 
