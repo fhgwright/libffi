@@ -1,5 +1,3 @@
-Status
-======
 
 libffi-3.7.1 was released on July 10, 2026.
 
